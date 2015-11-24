@@ -53,19 +53,17 @@ public class Download {
 
     public void downloadFiles() {
         for (URL url : getURLs()) {
-            if (!(url == null)) {
-                String file = url.getFile();
-                String baseName = FilenameUtils.getBaseName(file);
-                String extension = FilenameUtils.getExtension(file);
-                String fileName = baseName + "." + extension;
+            String file = url.getFile();
+            String baseName = FilenameUtils.getBaseName(file);
+            String extension = FilenameUtils.getExtension(file);
+            String fileName = baseName + "." + extension;
 
-                File saveFolder = new File(saveLocation);
+            File saveFolder = new File(saveLocation);
 
-                try {
-                    FileUtils.copyURLToFile(url, new File(saveFolder, fileName));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                FileUtils.copyURLToFile(url, new File(saveFolder, fileName));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
