@@ -2,7 +2,7 @@ import javax.swing.*;
 
 public class GUI {
 
-    private JTextField URLTextField;
+    private JTextField urlTextField;
     private JTextField saveLocationTextField;
     private JPanel mainPanel;
     private JCheckBox zipCheckBox;
@@ -10,6 +10,17 @@ public class GUI {
     private JPanel fileTypeSelection;
     private JSpinner noOfThreadsSpinner;
     private JButton downloadButton;
+
+    public GUI() {
+        downloadButton.addActionListener(e -> {
+            String url = urlTextField.getText();
+            String saveDir = saveLocationTextField.getText();
+            int threads = (int) noOfThreadsSpinner.getValue();
+
+            Download download = new Download(url, saveDir, threads);
+            download.downloadAll();
+        });
+    }
 
     public static void main(String[] args) {
         try {
