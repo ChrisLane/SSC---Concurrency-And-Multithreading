@@ -9,15 +9,17 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Download {
     private String url;
-    private String saveLocation;
+    private String saveDir;
     private Elements linkElements;
 
-    public Download(String url, String saveLocation) {
+    public Download(String url, String saveDir) {
         this.url = url;
-        this.saveLocation = saveLocation;
+        this.saveDir = saveDir;
 
         fetchLinkElements();
     }
@@ -51,20 +53,30 @@ public class Download {
         return urls;
     }
 
-    public void downloadFiles() {
+    public Runnable downloadFile(URL url, String fileName, File saveDir) {
+        return () -> {
+            try {
+                FileUtils.copyURLToFile(url, new File(saveDir, fileName));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+    }
+
+    public void downloadAll() {
+        ExecutorService pool = Executors.newFixedThreadPool(4);
+
         for (URL url : getURLs()) {
             String file = url.getFile();
             String baseName = FilenameUtils.getBaseName(file);
             String extension = FilenameUtils.getExtension(file);
             String fileName = baseName + "." + extension;
+            File saveDir = new File(this.saveDir);
 
-            File saveFolder = new File(saveLocation);
-
-            try {
-                FileUtils.copyURLToFile(url, new File(saveFolder, fileName));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Runnable runnable = downloadFile(url, fileName, saveDir);
+            pool.execute(runnable);
         }
+
+        pool.shutdown();
     }
 }
