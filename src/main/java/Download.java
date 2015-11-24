@@ -13,13 +13,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Download {
+    private int threads;
     private String url;
     private String saveDir;
     private Elements linkElements;
 
-    public Download(String url, String saveDir) {
+    public Download(String url, String saveDir, int threads) {
         this.url = url;
         this.saveDir = saveDir;
+        this.threads = threads;
 
         fetchLinkElements();
     }
@@ -55,16 +57,18 @@ public class Download {
 
     public Runnable downloadFile(URL url, String fileName, File saveDir) {
         return () -> {
+            System.out.println("Downloading started: " + fileName);
             try {
                 FileUtils.copyURLToFile(url, new File(saveDir, fileName));
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            System.out.println("Download complete: " + fileName);
         };
     }
 
     public void downloadAll() {
-        ExecutorService pool = Executors.newFixedThreadPool(4);
+        ExecutorService pool = Executors.newFixedThreadPool(threads);
 
         for (URL url : getURLs()) {
             String file = url.getFile();
