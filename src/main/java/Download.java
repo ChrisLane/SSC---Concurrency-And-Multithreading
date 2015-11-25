@@ -12,12 +12,22 @@ import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * The type Download.
+ */
 public class Download {
     private int threads;
     private String url;
     private String saveDir;
     private Elements linkElements;
 
+    /**
+     * Instantiates a new Download.
+     *
+     * @param url     the url
+     * @param saveDir the save dir
+     * @param threads the threads
+     */
     public Download(String url, String saveDir, int threads) {
         this.url = url;
         this.saveDir = saveDir;
@@ -26,6 +36,9 @@ public class Download {
         fetchLinkElements();
     }
 
+    /**
+     * Fetch link elements from the web page
+     */
     private void fetchLinkElements() {
         Document document = null;
 
@@ -39,6 +52,11 @@ public class Download {
         }
     }
 
+    /**
+     * Get the URLs from the link elements
+     *
+     * @return URLs
+     */
     private URL[] getURLs() {
         URL[] urls = new URL[linkElements.size()];
 
@@ -55,6 +73,14 @@ public class Download {
         return urls;
     }
 
+    /**
+     * Download file runnable.
+     *
+     * @param url      the url
+     * @param fileName the file name
+     * @param saveDir  the save dir
+     * @return the runnable
+     */
     public Runnable downloadFile(URL url, String fileName, File saveDir) {
         return () -> {
             System.out.println("Downloading started: " + fileName);
@@ -67,6 +93,9 @@ public class Download {
         };
     }
 
+    /**
+     * Download all files.
+     */
     public void downloadAll() {
         ExecutorService pool = Executors.newFixedThreadPool(threads);
 

@@ -1,5 +1,8 @@
 import javax.swing.*;
 
+/**
+ * The type Gui.
+ */
 public class GUI {
 
     private JTextField urlTextField;
@@ -11,7 +14,11 @@ public class GUI {
     private JSpinner noOfThreadsSpinner;
     private JButton downloadButton;
 
+    /**
+     * Instantiates a new Gui.
+     */
     public GUI() {
+        // Download all files for given parameters once the download button is pressed
         downloadButton.addActionListener(e -> {
             String url = urlTextField.getText();
             String saveDir = saveLocationTextField.getText();
@@ -22,6 +29,11 @@ public class GUI {
         });
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
