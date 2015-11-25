@@ -5,9 +5,6 @@ import javax.swing.*;
  */
 public class GUI {
 
-    public static boolean zipSelected;
-    public static boolean jpgSelected;
-    public static boolean pdfSelected;
     private JTextField urlTextField;
     private JTextField saveLocationTextField;
     private JPanel mainPanel;
@@ -28,18 +25,21 @@ public class GUI {
             String saveDir = saveLocationTextField.getText();
             int threads = (int) noOfThreadsSpinner.getValue();
 
-            Download download = new Download(url, saveDir, threads);
-            download.downloadAll();
-        });
+            String extensions = "";
+            boolean zips = zipCheckBox.isSelected();
+            boolean jpgs = jpgCheckBox.isSelected();
+            boolean pdfs = pdfCheckBox.isSelected();
 
-        zipCheckBox.addActionListener(e -> {
-            zipSelected = zipCheckBox.isSelected();
-        });
-        jpgCheckBox.addActionListener(e -> {
-            jpgSelected = jpgCheckBox.isSelected();
-        });
-        pdfCheckBox.addActionListener(e -> {
-            pdfSelected = pdfCheckBox.isSelected();
+            if (zips && jpgs && pdfs) extensions = "zip|jpg|pdf";
+            else if (jpgs && pdfs) extensions = "jpg|pdf";
+            else if (zips && pdfs) extensions = "zip|pdf";
+            else if (zips && jpgs) extensions = "zip|jpg";
+            else if (zips) extensions = "zip";
+            else if (jpgs) extensions = "jpg";
+            else if (pdfs) extensions = "pdf";
+
+            Download download = new Download(url, extensions, saveDir, threads);
+            download.downloadAll();
         });
     }
 

@@ -16,10 +16,11 @@ import java.util.concurrent.Executors;
  * The type Download.
  */
 public class Download {
-    private int threads;
     private String url;
+    private String extensions;
     private String saveDir;
     private Elements linkElements;
+    private int threads;
 
     /**
      * Instantiates a new Download.
@@ -28,8 +29,9 @@ public class Download {
      * @param saveDir the save dir
      * @param threads the threads
      */
-    public Download(String url, String saveDir, int threads) {
+    public Download(String url, String extensions, String saveDir, int threads) {
         this.url = url;
+        this.extensions = extensions;
         this.saveDir = saveDir;
         this.threads = threads;
 
@@ -41,15 +43,6 @@ public class Download {
      */
     private void fetchLinkElements() {
         Document document = null;
-
-        String extensions = "";
-        if (GUI.zipSelected && GUI.jpgSelected && GUI.pdfSelected) extensions = "zip|jpg|pdf";
-        else if (GUI.jpgSelected && GUI.pdfSelected) extensions = "jpg|pdf";
-        else if (GUI.zipSelected && GUI.pdfSelected) extensions = "zip|pdf";
-        else if (GUI.zipSelected && GUI.jpgSelected) extensions = "zip|jpg";
-        else if (GUI.zipSelected) extensions = "zip";
-        else if (GUI.jpgSelected) extensions = "jpg";
-        else if (GUI.pdfSelected) extensions = "pdf";
 
         System.out.println(extensions);
 
