@@ -13,6 +13,11 @@ public class GUI {
     private JPanel fileTypeSelection;
     private JSpinner noOfThreadsSpinner;
     private JButton downloadButton;
+    private JCheckBox pdfCheckBox;
+
+    public static boolean zipSelected;
+    public static boolean jpgSelected;
+    public static boolean pdfSelected;
 
     /**
      * Instantiates a new Gui.
@@ -26,6 +31,16 @@ public class GUI {
 
             Download download = new Download(url, saveDir, threads);
             download.downloadAll();
+        });
+
+        zipCheckBox.addActionListener(e -> {
+            zipSelected = zipCheckBox.isSelected();
+        });
+        jpgCheckBox.addActionListener(e -> {
+            jpgSelected = jpgCheckBox.isSelected();
+        });
+        pdfCheckBox.addActionListener(e -> {
+            pdfSelected = pdfCheckBox.isSelected();
         });
     }
 

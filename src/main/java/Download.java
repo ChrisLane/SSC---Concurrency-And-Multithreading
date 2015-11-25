@@ -42,13 +42,24 @@ public class Download {
     private void fetchLinkElements() {
         Document document = null;
 
+        String extensions = "";
+        if (GUI.zipSelected && GUI.jpgSelected && GUI.pdfSelected) extensions = "zip|jpg|pdf";
+        else if (GUI.jpgSelected && GUI.pdfSelected) extensions = "jpg|pdf";
+        else if (GUI.zipSelected && GUI.pdfSelected) extensions = "zip|pdf";
+        else if (GUI.zipSelected && GUI.jpgSelected) extensions = "zip|jpg";
+        else if (GUI.zipSelected) extensions = "zip";
+        else if (GUI.jpgSelected) extensions = "jpg";
+        else if (GUI.pdfSelected) extensions = "pdf";
+
+        System.out.println(extensions);
+
         try {
             document = Jsoup.connect(url).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
         if (document != null) {
-            linkElements = document.select("a[href~=(?i)\\.(zip|png|jpg|pdf)]");
+            linkElements = document.select("a[href~=(?i)\\.(" + extensions + ")]");
         }
     }
 
@@ -83,7 +94,7 @@ public class Download {
      */
     public Runnable downloadFile(URL url, String fileName, File saveDir) {
         return () -> {
-            System.out.println("Downloading started: " + fileName);
+            System.out.println("Download started: " + fileName);
             try {
                 FileUtils.copyURLToFile(url, new File(saveDir, fileName));
             } catch (IOException e) {
@@ -108,6 +119,7 @@ public class Download {
 
             Runnable downloadFile = downloadFile(url, fileName, saveDir);
             executor.execute(downloadFile);
+            System.out.println("Download queued: " + fileName);
         }
 
         executor.shutdown();
