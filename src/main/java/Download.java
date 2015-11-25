@@ -97,7 +97,7 @@ public class Download {
      * Download all files.
      */
     public void downloadAll() {
-        ExecutorService pool = Executors.newFixedThreadPool(threads);
+        ExecutorService executor = Executors.newFixedThreadPool(threads);
 
         for (URL url : getURLs()) {
             String file = url.getFile();
@@ -106,10 +106,10 @@ public class Download {
             String fileName = baseName + "." + extension;
             File saveDir = new File(this.saveDir);
 
-            Runnable runnable = downloadFile(url, fileName, saveDir);
-            pool.execute(runnable);
+            Runnable downloadFile = downloadFile(url, fileName, saveDir);
+            executor.execute(downloadFile);
         }
 
-        pool.shutdown();
+        executor.shutdown();
     }
 }
