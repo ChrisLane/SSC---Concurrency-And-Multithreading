@@ -5,6 +5,9 @@ import javax.swing.*;
  */
 public class GUI {
 
+    public static boolean zipSelected;
+    public static boolean jpgSelected;
+    public static boolean pdfSelected;
     private JTextField urlTextField;
     private JTextField saveLocationTextField;
     private JPanel mainPanel;
@@ -14,10 +17,6 @@ public class GUI {
     private JSpinner noOfThreadsSpinner;
     private JButton downloadButton;
     private JCheckBox pdfCheckBox;
-
-    public static boolean zipSelected;
-    public static boolean jpgSelected;
-    public static boolean pdfSelected;
 
     /**
      * Instantiates a new Gui.
