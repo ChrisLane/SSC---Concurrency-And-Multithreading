@@ -30,6 +30,7 @@ public class GUI {
             boolean jpgs = jpgCheckBox.isSelected();
             boolean pdfs = pdfCheckBox.isSelected();
 
+            // Set which extensions to be searching for
             if (zips && jpgs && pdfs) extensions = "zip|jpg|pdf";
             else if (jpgs && pdfs) extensions = "jpg|pdf";
             else if (zips && pdfs) extensions = "zip|pdf";
@@ -38,6 +39,7 @@ public class GUI {
             else if (jpgs) extensions = "jpg";
             else if (pdfs) extensions = "pdf";
 
+            // Create and start the download
             Download download = new Download(url, extensions, saveDir, threads);
             download.downloadAll();
         });
@@ -49,12 +51,14 @@ public class GUI {
      * @param args the input arguments
      */
     public static void main(String[] args) {
+        // Set the look and feel to fix mainly high dpi screen window sizes
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
+        // Create the GUI
         JFrame frame = new JFrame("File Downloader");
         frame.setContentPane(new GUI().mainPanel);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -62,6 +66,7 @@ public class GUI {
         frame.setVisible(true);
     }
 
+    // Create the thread count spinner with custom properties (1-10)
     private void createUIComponents() {
         SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(1, 1, 10, 1);
         noOfThreadsSpinner = new JSpinner(spinnerNumberModel);

@@ -35,6 +35,7 @@ public class Download {
         this.saveDir = saveDir;
         this.threads = threads;
 
+        // Grab the html elements for links on the page
         fetchLinkElements();
     }
 
@@ -51,6 +52,8 @@ public class Download {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Only select link elements that match our extension options
         if (document != null) {
             linkElements = document.select("a[href~=(?i)\\.(" + extensions + ")]");
         }
@@ -104,12 +107,14 @@ public class Download {
         ExecutorService executor = Executors.newFixedThreadPool(threads);
 
         for (URL url : getURLs()) {
+            // Split up the file namings to variables
             String file = url.getFile();
             String baseName = FilenameUtils.getBaseName(file);
             String extension = FilenameUtils.getExtension(file);
             String fileName = baseName + "." + extension;
             File saveDir = new File(this.saveDir);
 
+            // Download this file on a new thread
             Runnable downloadFile = downloadFile(url, fileName, saveDir);
             executor.execute(downloadFile);
             System.out.println("Download queued: " + fileName);
