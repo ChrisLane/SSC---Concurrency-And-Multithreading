@@ -25,9 +25,9 @@ public class Download {
     /**
      * Instantiates a new Download.
      *
-     * @param url     the url
-     * @param saveDir the save dir
-     * @param threads the threads
+     * @param url     the url to download from
+     * @param saveDir the save directory
+     * @param threads the number of threads to be used
      */
     public Download(String url, String extensions, String saveDir, int threads) {
         this.url = url;
@@ -62,7 +62,7 @@ public class Download {
     /**
      * Get the URLs from the link elements
      *
-     * @return URLs
+     * @return URLs from all link elements
      */
     private URL[] getURLs() {
         URL[] urls = new URL[linkElements.size()];
@@ -81,11 +81,11 @@ public class Download {
     }
 
     /**
-     * Download file runnable.
+     * Download single file runnable.
      *
-     * @param url      the url
+     * @param url      the url of the file's location
      * @param fileName the file name
-     * @param saveDir  the save dir
+     * @param saveDir  the save directory
      * @return the runnable
      */
     public Runnable downloadFile(URL url, String fileName, File saveDir) {
