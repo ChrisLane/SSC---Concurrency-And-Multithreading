@@ -45,8 +45,6 @@ public class Download {
     private void fetchLinkElements() {
         Document document = null;
 
-        System.out.println(extensions);
-
         try {
             document = Jsoup.connect(url).get();
         } catch (IOException e) {
