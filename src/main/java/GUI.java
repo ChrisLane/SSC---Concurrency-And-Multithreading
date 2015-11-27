@@ -21,28 +21,37 @@ public class GUI {
     public GUI() {
         // Download all files for given parameters once the download button is pressed
         downloadButton.addActionListener(e -> {
-            String url = urlTextField.getText();
-            String saveDir = saveLocationTextField.getText();
-            int threads = (int) noOfThreadsSpinner.getValue();
-
-            String extensions = "";
-            boolean zips = zipCheckBox.isSelected();
-            boolean jpgs = jpgCheckBox.isSelected();
-            boolean pdfs = pdfCheckBox.isSelected();
-
-            // Set which extensions to be searching for
-            if (zips && jpgs && pdfs) extensions = "zip|jpg|pdf";
-            else if (jpgs && pdfs) extensions = "jpg|pdf";
-            else if (zips && pdfs) extensions = "zip|pdf";
-            else if (zips && jpgs) extensions = "zip|jpg";
-            else if (zips) extensions = "zip";
-            else if (jpgs) extensions = "jpg";
-            else if (pdfs) extensions = "pdf";
-
-            // Create and start the download
-            Download download = new Download(url, extensions, saveDir, threads);
-            download.downloadAll();
+            start();
         });
+    }
+
+    public void start() {
+        Thread worker = new Thread() {
+            public void run() {
+                String url = urlTextField.getText();
+                String saveDir = saveLocationTextField.getText();
+                int threads = (int) noOfThreadsSpinner.getValue();
+
+                String extensions = "";
+                boolean zips = zipCheckBox.isSelected();
+                boolean jpgs = jpgCheckBox.isSelected();
+                boolean pdfs = pdfCheckBox.isSelected();
+
+                // Set which extensions to be searching for
+                if (zips && jpgs && pdfs) extensions = "zip|jpg|pdf";
+                else if (jpgs && pdfs) extensions = "jpg|pdf";
+                else if (zips && pdfs) extensions = "zip|pdf";
+                else if (zips && jpgs) extensions = "zip|jpg";
+                else if (zips) extensions = "zip";
+                else if (jpgs) extensions = "jpg";
+                else if (pdfs) extensions = "pdf";
+
+                // Create and start the download
+                Download download = new Download(url, extensions, saveDir, threads);
+                download.downloadAll();
+            }
+        };
+        worker.start();
     }
 
     /**
@@ -51,19 +60,22 @@ public class GUI {
      * @param args the input arguments
      */
     public static void main(String[] args) {
-        // Set the look and feel to fix mainly high dpi screen window sizes
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        SwingUtilities.invokeLater(() -> {
+                    // Set the look and feel to fix mainly high dpi screen window sizes
+                    try {
+                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    } catch (ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException | IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
 
-        // Create the GUI
-        JFrame frame = new JFrame("File Downloader");
-        frame.setContentPane(new GUI().mainPanel);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+                    // Create the GUI
+                    JFrame frame = new JFrame("File Downloader");
+                    frame.setContentPane(new GUI().mainPanel);
+                    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                    frame.pack();
+                    frame.setVisible(true);
+                }
+        );
     }
 
     // Create the thread count spinner with custom properties (1-10)
